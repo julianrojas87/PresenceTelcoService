@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="all" name="PresenceTelcoService">
+    <target name="init">
+        <path id="slee">
+            <pathelement location="lib/slee.jar"/>
+        </path>
+        <taskdef classname="org.mobicents.eclipslee.ant.SbbJar"
+            classpath="lib/slee-tasks.jar" name="sbbjar"/>
+        <taskdef classname="org.mobicents.eclipslee.ant.EventJar"
+            classpath="lib/slee-tasks.jar" name="eventjar"/>
+        <taskdef classname="org.mobicents.eclipslee.ant.ProfileSpecJar"
+            classpath="lib/slee-tasks.jar" name="profilespecjar"/>
+        <taskdef classname="org.mobicents.eclipslee.ant.DeployableJar"
+            classpath="lib/slee-tasks.jar" name="deployablejar"/>
+        <taskdef
+            classname="org.mobicents.eclipslee.ant.ResourceAdaptorTypeJar"
+            classpath="lib/slee-tasks.jar" name="resourceadaptortypejar"/>
+        <taskdef
+            classname="org.mobicents.eclipslee.ant.ResourceAdaptorJar"
+            classpath="lib/slee-tasks.jar" name="resourceadaptorjar"/>
+        <path id="ExternalComponents">
+            <pathelement location="lib/DU/sip11-ra-DU-2.6.0.FINAL-Eclipslee.jar/jars/jain-sip-api-1.2.jar"/>
+            <pathelement location="lib/DU/sip11-ra-DU-2.6.0.FINAL-Eclipslee.jar/jars/jain-sip-ri-1.2.164.jar"/>
+            <pathelement location="lib/DU/sip11-ra-DU-2.6.0.FINAL-Eclipslee.jar/jars/sip11-events-2.6.0.FINAL.jar"/>
+            <pathelement location="lib/DU/sip11-ra-DU-2.6.0.FINAL-Eclipslee.jar/jars/sip11-library-2.6.0.FINAL.jar"/>
+            <pathelement location="lib/DU/sip11-ra-DU-2.6.0.FINAL-Eclipslee.jar/jars/sip11-ra-2.6.0.FINAL.jar"/>
+            <pathelement location="lib/DU/sip11-ra-DU-2.6.0.FINAL-Eclipslee.jar/jars/sip11-ratype-2.6.0.FINAL.jar"/>
+        	<pathelement location="/home/julian/Telcomp-Workspace/DataAccessService/jars/StartGetDataTelcoService-event.jar"/>
+        	<pathelement location="/home/julian/Telcomp-Workspace/DataAccessService/jars/EndGetDataTelcoService-event.jar"/>
+        	<pathelement location="/home/julian/Telcomp-Workspace/DataAccessService/jars/StartSearchDataTelcoService-event.jar"/>
+        	<pathelement location="/home/julian/Telcomp-Workspace/DataAccessService/jars/EndSearchDataTelcoService-event.jar"/>
+        </path>
+        <path id="path-PresenceTelcoService-sbb">
+            <pathelement location="/home/julian/Telcomp-Workspace/PresenceTelcoService/jars/EndPresenceTelcoService-event.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/PresenceTelcoService/jars/StartPresenceTelcoService-event.jar"/>
+        </path>
+    </target>
+    <target depends="init" name="all">
+        <ant target="build-StartPresenceTelcoService-event"/>
+        <ant target="build-EndPresenceTelcoService-event"/>
+        <ant target="build-PresenceTelcoService-sbb"/>
+        <ant target="build-presencetelco-DU"/>
+    </target>
+    <target depends="init" name="clean">
+        <ant target="clean-StartPresenceTelcoService-event"/>
+        <ant target="clean-EndPresenceTelcoService-event"/>
+        <ant target="clean-PresenceTelcoService-sbb"/>
+        <ant target="clean-presencetelco-DU"/>
+    </target>
+    <target depends="init" name="build-StartPresenceTelcoService-event">
+        <mkdir dir="classes/StartPresenceTelcoService-event"/>
+        <mkdir dir="jars/"/>
+        <javac destdir="classes/StartPresenceTelcoService-event"
+            includes="org/telcomp/events/StartPresenceTelcoServiceEvent.java" srcdir="src">
+            <classpath>
+                <path refid="slee"/>
+            </classpath>
+        </javac>
+        <eventjar classpath="classes/StartPresenceTelcoService-event"
+            destfile="jars/StartPresenceTelcoService-event.jar" eventjarxml="src/org/telcomp/events/StartPresenceTelcoService-event-jar.xml"/>
+    </target>
+    <target name="clean-StartPresenceTelcoService-event">
+        <delete file="jars/StartPresenceTelcoService-event.jar"/>
+        <delete dir="classes/StartPresenceTelcoService-event"/>
+    </target>
+    <target depends="init" name="build-EndPresenceTelcoService-event">
+        <mkdir dir="classes/EndPresenceTelcoService-event"/>
+        <mkdir dir="jars/"/>
+        <javac destdir="classes/EndPresenceTelcoService-event"
+            includes="org/telcomp/events/EndPresenceTelcoServiceEvent.java" srcdir="src">
+            <classpath>
+                <path refid="slee"/>
+            </classpath>
+        </javac>
+        <eventjar classpath="classes/EndPresenceTelcoService-event"
+            destfile="jars/EndPresenceTelcoService-event.jar" eventjarxml="src/org/telcomp/events/EndPresenceTelcoService-event-jar.xml"/>
+    </target>
+    <target name="clean-EndPresenceTelcoService-event">
+        <delete file="jars/EndPresenceTelcoService-event.jar"/>
+        <delete dir="classes/EndPresenceTelcoService-event"/>
+    </target>
+    <target depends="init" name="build-PresenceTelcoService-sbb">
+        <mkdir dir="classes/PresenceTelcoService-sbb"/>
+        <mkdir dir="jars/"/>
+        <javac destdir="classes/PresenceTelcoService-sbb"
+            includes="org/telcomp/sbb/PresenceTelcoServiceSbb.java" srcdir="src">
+            <classpath>
+                <path refid="path-PresenceTelcoService-sbb"/>
+                <path refid="ExternalComponents"/>
+                <path refid="slee"/>
+            </classpath>
+        </javac>
+    	<sbbjar classpath="classes/PresenceTelcoService-sbb"
+    	            destfile="jars/PresenceTelcoService-sbb.jar" sbbjarxml="src/org/telcomp/sbb/PresenceTelcoService-sbb-jar.xml"/>
+    </target>
+    <target name="clean-PresenceTelcoService-sbb">
+        <delete file="jars/PresenceTelcoService-sbb.jar"/>
+        <delete dir="classes/PresenceTelcoService-sbb"/>
+    </target>
+    <target depends="build-EndPresenceTelcoService-event,build-StartPresenceTelcoService-event" name="build-presencetelco-DU">
+        <mkdir dir="classes/presencetelco-DU"/>
+        <copy
+            file="src/org/telcomp/service/presencetelco-deployable-unit.xml" tofile="classes/presencetelco-DU/deployable-unit.xml"/>
+        <jar jarfile="jars/presencetelco-DU.jar">
+            <metainf dir="classes/presencetelco-DU" includes="deployable-unit.xml"/>
+            <fileset dir="" includes="jars/PresenceTelcoService-sbb.jar"/>
+            <fileset dir="" includes="jars/EndPresenceTelcoService-event.jar"/>
+            <fileset dir="" includes="jars/StartPresenceTelcoService-event.jar"/>
+            <fileset dir="." includes="src/org/telcomp/service/presencetelco-service.xml"/>
+        </jar>
+    </target>
+    <target name="clean-presencetelco-DU">
+        <delete file="jars/presencetelco-DU.jar"/>
+        <delete dir="classes/presencetelco-DU"/>
+    </target>
+</project>
