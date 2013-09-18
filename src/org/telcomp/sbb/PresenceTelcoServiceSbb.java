@@ -28,6 +28,11 @@ public abstract class PresenceTelcoServiceSbb implements javax.slee.Sbb {
 
 	public void onStartPresenceTelcoServiceEvent(StartPresenceTelcoServiceEvent event, ActivityContextInterface aci) {
 		this.setExecutionACI(aci);
+		System.out.println("*******************************************");
+		System.out.println("PresenceTelcoService Invoked");
+		System.out.println("Input Parameter = "+event.getParameter());
+		System.out.println("Input Value = "+event.getValue());
+		
 		if(event.getParameter().equals("identification")){
 			this.userId = event.getParameter();
 			HashMap<String, Object> operationInputs = new HashMap<String, Object>();
@@ -56,6 +61,9 @@ public abstract class PresenceTelcoServiceSbb implements javax.slee.Sbb {
 		this.fireEndPresenceTelcoServiceEvent(EndPresenceEvent, this.getExecutionACI(), null);
 		aci.detach(this.sbbContext.getSbbLocalObject());
 		this.getExecutionACI().detach(this.sbbContext.getSbbLocalObject());
+		System.out.println("Output UserID = "+this.userId);
+		System.out.println("Output State = "+event.getValue());
+		System.out.println("*******************************************");
 	}
 	
 	public void onEndSearchDataTelcoServiceEvent(EndSearchDataTelcoServiceEvent event, ActivityContextInterface aci) {
